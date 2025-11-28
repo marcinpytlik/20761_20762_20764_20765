@@ -1,0 +1,3 @@
+# Trainer Manual
+
+placeholder

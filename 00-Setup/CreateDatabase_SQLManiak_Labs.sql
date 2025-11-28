@@ -1,0 +1,19 @@
+
+CREATE DATABASE SQLManiak_Labs;
+GO
+USE SQLManiak_Labs;
+GO
+
+CREATE SCHEMA Person;
+CREATE SCHEMA Product;
+CREATE SCHEMA Sales;
+CREATE SCHEMA Finance;
+GO
+
+CREATE TABLE Person.Customer(
+    CustomerId INT IDENTITY PRIMARY KEY,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Email NVARCHAR(100)
+);
+GO

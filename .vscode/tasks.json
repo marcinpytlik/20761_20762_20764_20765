@@ -1,0 +1,18 @@
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run SQL file",
+      "type": "shell",
+      "command": "sqlcmd",
+      "args": [
+        "-S", "localhost,14333",
+        "-U", "sa",
+        "-P", "YourStrong!Passw0rd",
+        "-d", "SQLManiak_Labs",
+        "-i", "${file}"
+      ]
+    }
+  ]
+}
