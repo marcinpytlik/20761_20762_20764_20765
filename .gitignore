@@ -1,0 +1,4 @@
+# Ignoruj wszystkie pliki backupów
+backups/*
+# Ale NIE ignoruj pliku .gitkeep
+!backups/.gitkeep
