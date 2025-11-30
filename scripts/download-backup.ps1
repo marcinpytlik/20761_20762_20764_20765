@@ -1,20 +1,37 @@
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$FileId,            # ID pliku z Google Drive
+    [string]$FileId,            # ID pliku z Google Drive (opcjonalnie)
+    [string]$Url,               # Pełny link "Udostępnij" z Google Drive (opcjonalnie)
 
     [Parameter(Mandatory = $true)]
     [string]$BackupName,        # Nazwa pliku wynikowego, np. AdventureWorks2022.bak
 
-    [string]$BackupDir          # <- bez domyślnej wartości tutaj
+    [string]$BackupDir          # zostaw pusty, policzymy poniżej
 )
 
 Write-Host "=== SQLManiak Backup Downloader ===" -ForegroundColor Cyan
 
 # Jeśli nie podano BackupDir – ustaw na ..\backups względem katalogu skryptu
 if (-not $BackupDir) {
-    # $PSScriptRoot = katalog, w którym leży ten skrypt (scripts)
     $repoRoot  = Split-Path $PSScriptRoot -Parent   # katalog wyżej = root repo
     $BackupDir = Join-Path $repoRoot "backups"
+}
+
+# Jeśli nie ma FileId, ale jest Url – wyciągnij FileId z URL
+if (-not $FileId -and $Url) {
+    # Szukamy fragmentu /d/<ID>/
+    if ($Url -match "/d/([^/]+)") {
+        $FileId = $matches[1]
+        Write-Host "Wyciągnięty FileId z URL: $FileId"
+    }
+    else {
+        Write-Host "❌ Nie udało się wyciągnąć FileId z podanego URL." -ForegroundColor Red
+        exit 1
+    }
+}
+
+if (-not $FileId) {
+    Write-Host "❌ Musisz podać albo -FileId, albo -Url." -ForegroundColor Red
+    exit 1
 }
 
 Write-Host "FileId     : $FileId"
@@ -29,6 +46,7 @@ if (-not (Test-Path $BackupDir)) {
 
 $destinationPath = Join-Path $BackupDir $BackupName
 
+# Direct download link
 $downloadUrl = "https://drive.google.com/uc?export=download&id=$FileId"
 
 Write-Host "Pobieram plik z:"
