@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  sql2022:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql2022
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_COLLATION=Polish_CI_AS
+    ports:
+      - "14333:1433"
+    volumes:
+      # Tu wrzucasz pliki .bak z hosta
+      - ./backups:/var/opt/mssql/backups
+      # Dane SQL w osobnym volume (żeby nie zniknęły przy restarcie kontenera)
+      - sql2022_data:/var/opt/mssql/data
+
+volumes:
+  sql2022_data:
